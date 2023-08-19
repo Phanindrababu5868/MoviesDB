@@ -1,0 +1,42 @@
+.movie-poster-container{
+    list-style: none;
+    margin: 30px;
+    width:120px;
+
+}
+@media (max-width:768px) {
+
+    .movie-poster-container{
+        margin: 20px;
+    }
+}
+
+
+img{
+    width:100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.movie-poster-details-container{
+    width: 100%;
+    text-align: center;
+}
+
+.movie-rating,.movie-title{
+    font-size:18px;
+    color:#ffffff;
+}
+
+
+@media (max-width:768px) {
+
+    .movie-rating,.movie-title{
+        font-size: 12px;
+    }
+}
+
+
+.link{
+    color: transparent;
+}
