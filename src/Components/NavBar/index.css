@@ -1,12 +1,8 @@
-.home-bg-container{
-    background-color:#dad6d6;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+
 .navbar-bg-container{
-    width: 100%;
+   
     background-color:#858587;
+    flex-grow: 1;
  
 }
 

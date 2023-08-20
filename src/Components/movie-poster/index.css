@@ -1,14 +1,22 @@
 .movie-poster-container{
     list-style: none;
     margin: 30px;
-    width:120px;
+    width:200px;
 
 }
-@media (max-width:768px) {
+@media (max-width:767px) {
 
     .movie-poster-container{
         margin: 20px;
+        width: 60px;
     }
+}
+
+@media (width:768px) {
+    .movie-poster-container{
+        width: 80px;
+    }
+    
 }
 
 

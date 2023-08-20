@@ -1,4 +1,4 @@
-import { Component } from 'react';
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Components/Home';
@@ -32,4 +32,4 @@ const App =() =>{
 
 
 
-export default App;
+export default App

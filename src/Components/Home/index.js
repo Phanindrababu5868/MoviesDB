@@ -1,44 +1,43 @@
-import {Component} from "react"
+import {Component, useEffect, useState} from "react"
 import {TailSpin} from 'react-loader-spinner'
 import MoviePoster from "../movie-poster"
+import Pagination from "../pagnation"
 import "./index.css"
 
 
 
-class Home extends Component{
-    state={movies:[],isLoading:true}
+const Home=()=> {
+    const[movies,setMovies]=useState([])
+    const[isLoading,setIsLoading]=useState(true)
+    const[currentPage,setCurrentPage]=useState(1)
+    const[totalPages,setTotalPages]=useState(0)
 
    
 
-    fetchPopularMovies=async()=>{
-        const url=`https://api.themoviedb.org/3/movie/popular?api_key=e8ccc676e299173067a80520c1fee405&language=en-US&page=1`
+    const fetchPopularMovies=async()=>{
+        const url=`https://api.themoviedb.org/3/movie/popular?api_key=e8ccc676e299173067a80520c1fee405&language=en-US&page=${currentPage}`
         const res= await fetch(url)
         const data= await res.json()
-        console.log(data)
         if(res.ok===true){
-       this.setState({movies:data.results}
-      
-        )}
-        this.setState({isLoading:false})
+        setMovies(data.results)
+        setTotalPages(data.total_pages)
+        console.log(data.results[0])
     }
-
-     onInputChange=event=>{
-        this.setState({searchInput:event.target.value})
+        setIsLoading(false)
     }
-
-   
 
     
 
-    componentDidMount(){
-        this.fetchPopularMovies()
+    const onChangePage=(pageNum)=>{
+        setCurrentPage(pageNum)
+        console.log(pageNum)
     }
 
+    useEffect(()=>{
+        fetchPopularMovies()
+        console.log("fetch movies")
+    },[currentPage])
 
-
-    
-    render(){
-        const{movies,isLoading}=this.state
  
     return(
         <>
@@ -46,21 +45,21 @@ class Home extends Component{
             {isLoading?<TailSpin width={50} height={50} color={"#f44336"} />:
             (movies.length===0 ? (
                 <>
-                <img src="https://res.cloudinary.com/dpj2drryk/image/upload/v1652192630/Group_1_dwo6su.png"/>
+                <img src="https://res.cloudinary.com/dpj2drryk/image/upload/v1652192630/Group_1_dwo6su.png" alt="Not Found"/>
                 <h1>There is no Movies with given Name</h1>
                 </>
             )  :
             (<ul className="movies-list-container">
                 {
-                movies.map((each)=>(
-                    <MoviePoster releasedate={each.release_date} overview={each.overview} id={each} title={each.title} imageUrl={each.poster_path} rating={each.vote_average}/>
+                movies.map((eachMovie)=>(
+                    <MoviePoster key={eachMovie.id} overview={eachMovie.overview} id={eachMovie.id} title={eachMovie.title} imageUrl={eachMovie.poster_path} rating={eachMovie.vote_average}/>
                 ))}
             </ul>))
             }
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} changePage={onChangePage}/>
         </>
     )
-}
 }
 
 export default Home

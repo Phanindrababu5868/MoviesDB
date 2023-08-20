@@ -1,0 +1,83 @@
+.active-btn{
+    background-color: blue;
+    color:white;
+    border:1px solid blue;
+  }
+  button{
+    border:none;
+    border-radius: 0px;
+    padding:10px;
+    cursor: pointer;
+    margin-left:10px;
+    color:#ffffff;
+    background-color: transparent;
+  }
+  
+  select{
+    padding:10px;
+  }
+
+.pagination-container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  background-color:#474545;
+}
+
+.pagination-btn-container{
+  display: flex;
+  
+}
+
+@media (max-width:768px) {
+  .pagination-container{
+    flex-direction: column;
+  }
+  .pagination-btn-container{
+    order:-1;
+  }
+  
+}
+
+
+
+input{
+  min-width:50px;
+  height: 20px;
+  border: none;
+}
+
+@media (max-width:768px) {
+  input{
+    order: 1;
+  }
+}
+
+.pages-numbers-container{
+  border-radius: 60px;
+  border: 2px solid yellow;
+  font-size:18px;
+  text-align: center;
+  min-height:80px;
+  min-width: 80px;
+}
+
+
+.goto-button{
+  background-color: blue;
+  font-size:18px;
+  color:#ffffff;
+  font-family: "Roboto";
+  border-radius: 20px;
+  margin-left: 10px;
+  height: 30px;
+  background-color: #5b5b5b;
+  cursor: pointer;
+}
+
+
+p{
+  font-size:18px;
+  color: #ffffff;
+}

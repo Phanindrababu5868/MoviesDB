@@ -1,5 +1,4 @@
 import {Link} from "react-router-dom"
-import SearchContext from "../../Context"
 import "./index.css"
 
 const NavBar=()=>{

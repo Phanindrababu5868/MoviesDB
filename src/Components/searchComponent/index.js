@@ -1,74 +1,71 @@
-import { Component } from "react";
+import { useEffect,useState } from "react";
+import Pagination from "../pagnation";
 import MoviePoster from "../movie-poster";
 import { TailSpin } from "react-loader-spinner";
+import PopularMovies from "../popularMovies";
 
 import "./index.css"
 
-class SearchComponent extends Component{
-    state={movies:[],searchInput:"",isLoading:true}
+const SearchComponent =()=>{
+    const[movies,setMovies]=useState([])
+    const[isLoading,setIsLoading]=useState(true)
+    const[currentPage,setCurrentPage]=useState(1)
+    const[totalPages,setTotalPages]=useState(0)
+    const[searchInput,setSaerchInput]=useState("")
+    
 
-
-
-
-   fetchMovies=async movie =>{
-        const url=`https://api.themoviedb.org/3/search/movie?api_key=e8ccc676e299173067a80520c1fee405&query=${movie}`
+  const fetchMovies=async movie =>{
+    console.log(movie)
+    setIsLoading(true)
+        const url=`https://api.themoviedb.org/3/search/movie?api_key=e8ccc676e299173067a80520c1fee405&query=${movie}&page=${currentPage}`
         const res= await fetch(url)
         const data= await res.json()
         if(res.ok===true){
-       this.setState({movies:data.results})
+            setMovies(data.results)
+            setTotalPages(data.total_pages)
+            console.log(data.results[0])
     }
         
-        this.setState({isLoading:false})
+        setIsLoading(false)
     }
 
-    onInputChange=event=>{
-        this.setState({searchInput:event.target.value})
+    const onInputChange=event=>{
+        setSaerchInput(event.target.value)
     }
 
-    
-fetchPopularMovies=async()=>{
-            this.setState({isLoading:true})
-            const url=`https://api.themoviedb.org/3/movie/popular?api_key=e8ccc676e299173067a80520c1fee405&language=en-US&page=1`
-            const res= await fetch(url)
-            const data= await res.json()
-            console.log(data)
-            if(res.ok===true){
-           this.setState({movies:data.results}
-          
-            )}
-            this.setState({isLoading:false})
+   const onChangePage=(pageNum)=>{
+    setCurrentPage(pageNum)
+    }
+
+    const onClickSeachbtn=()=>{
+        fetchMovies(searchInput)
+        setCurrentPage(1)
+    }
+
+    useEffect(()=>{
+        if(searchInput!==""){
+        fetchMovies(searchInput)
+        console.log("useffct callesd at ",currentPage)
         }
+    },[currentPage])
+    
     
 
-    onClickSeachbtn=()=>{
-            const{searchInput}=this.state
-                if(searchInput===""){
-                    alert("Enter Movie Name")
-                }
-                else{
-                this.fetchMovies(searchInput)
-            }
-            }
-
-            componentDidMount(){
-                this.fetchPopularMovies()
-            }
-    
-
-    render()
-    {
-        const{searchInput,movies,isLoading}=this.state
+   
+      
         return(
             <>
-                <div className="movies-container">
-                    <div className="search-container">
-                        <input value={searchInput} onChange={this.onInputChange}/>
-                        <button className="search-button" onClick={this.onClickSeachbtn}>Search</button>
+            <div className="search-container">
+                        <input value={searchInput} onChange={onInputChange}/>
+                        <button className="search-button" onClick={onClickSeachbtn}>Search</button>
                     </div>
-                {isLoading?<TailSpin width={50} height={50} color={"#f44336"} />:
+            {searchInput==="" ? <PopularMovies/>:
+            <>
+                <div className="movies-container">
+                {isLoading?<div className="loader"> <TailSpin width={50} height={50} color={"#f44336"} /> </div>:
                 (movies.length===0 ? (
                     <>
-                    <img src="https://res.cloudinary.com/dpj2drryk/image/upload/v1652192630/Group_1_dwo6su.png" className="not-found-img"/>
+                    <img src="https://res.cloudinary.com/dpj2drryk/image/upload/v1652192630/Group_1_dwo6su.png" className="not-found-img" alt="Not Found"/>
                     <h1>There is no Movies with given Name</h1>
                     </>
                 )  :
@@ -80,10 +77,13 @@ fetchPopularMovies=async()=>{
                 </ul>))
                 }
                 </div>
+                <Pagination currentPage={currentPage} totalPages={totalPages} changePage={onChangePage}/>
+                </>
+                }
             </>
         )
     }
-}
+
 
 
 

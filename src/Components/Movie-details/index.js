@@ -1,17 +1,25 @@
 import { useEffect,useState} from "react";
+import Pagination from "../pagnation";
 import { useParams } from 'react-router-dom';
 import "./index.css"
 
 const MoviesDetails=()=> {
     const[details,setDetails]=useState([])
     const[castDetails,setCastdetails]=useState([])
+    const [currentPage,setCurrentPage]=useState(1)
+    const[totalPages,setTotalPages]=useState(1)
+   
+
     const{id}=useParams()
+
+    const onChangePage=(pageNum)=>{
+       setCurrentPage(pageNum)
+    }
 
     const fetchMovieDteails=async()=>{
         let url=`https://api.themoviedb.org/3/movie/${id}?api_key=c45a857c193f6302f2b5061c3b85e743&language=en-US`
         const res= await fetch(url)
         const data= await res.json()
-        console.log(data)
         if(res.ok===true){
        setDetails(data)}
     }
@@ -20,19 +28,19 @@ const MoviesDetails=()=> {
         let url=`https://api.themoviedb.org/3/movie/${id}/credits?api_key=c45a857c193f6302f2b5061c3b85e743&language=en-US`
         const res= await fetch(url)
         const data= await res.json()
-        console.log(data)
-
         if(res.ok===true){
             setCastdetails(data.cast)
+            setTotalPages(Math.ceil(data.cast.length/10))
       }
     }
 
     useEffect(()=>{
         fetchMovieDteails()
         fetchCastDeatils()
-    })
+    },[])
 
- 
+    let currentIndex= (currentPage-1)
+    let currentCastDetails= castDetails.slice( (currentIndex*10)+1 ,(currentIndex*10)+11)
         return(
         <div className="movie-details-page-bg-container">
             <div className="banner-container">
@@ -53,7 +61,7 @@ const MoviesDetails=()=> {
             </div>
             <h1>Cast</h1>
             <ul className="cast-container">
-                {castDetails.map(each => (
+                {currentCastDetails.map(each => (
                     <li className="profile">
                     <img src={ each.profile_path==null? 'https://tse3.mm.bing.net/th?id=OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8&pid=Api&P=0&h=180':`https://image.tmdb.org/t/p/w500/${each.profile_path}`} className="profile-img" alt={each.title}/>
                     <p className="person-profile">{each.name}</p>
@@ -61,6 +69,7 @@ const MoviesDetails=()=> {
                 </li>
                 ))}
             </ul>
+            <Pagination currentPage={currentPage} totalPages={totalPages} changePage={onChangePage} />
         </div>
         )
 }
